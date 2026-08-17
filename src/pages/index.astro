@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getTagColor } from '../utils/tags';
+import { siteGroupsByType, TYPE_COLORS } from '../data/sites';
 
 const actresses = await getCollection('actresses');
 
@@ -198,6 +199,173 @@ const sortedTags = Object.entries(tagCounts)
     .tag-blue { background: #339af0; }
     .tag-purple { background: #845ef7; }
     .tag-brown { background: #b08968; }
+
+    /* ---------- 网站管理区 ---------- */
+    .sites-section {
+      max-width: 1100px;
+      margin: 60px auto 40px;
+      padding: 0 20px;
+    }
+    .sites-section h2 {
+      font-size: 18px;
+      color: #555;
+      margin-bottom: 22px;
+      padding-left: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sites-section h2::before {
+      content: "";
+      width: 4px;
+      height: 18px;
+      background: #ff6b8a;
+      border-radius: 2px;
+    }
+    .site-group {
+      margin-bottom: 26px;
+    }
+    .site-group-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #888;
+      margin-bottom: 12px;
+      padding-left: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .site-group-title .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ff6b8a;
+    }
+    .site-group-title .group-count {
+      font-size: 12px;
+      color: #bbb;
+      font-weight: 500;
+    }
+    .site-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .site-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      background: #fff;
+      border-radius: 14px;
+      text-decoration: none;
+      color: inherit;
+      border: 2px solid transparent;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+    .site-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.1);
+      border-color: #ffe0e8;
+    }
+    .site-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+      color: #fff;
+      font-weight: 700;
+    }
+    .site-info {
+      flex: 1;
+      min-width: 0;
+    }
+    .site-name {
+      font-size: 15px;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .site-desc {
+      font-size: 12px;
+      color: #999;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .site-arrow {
+      color: #ccc;
+      font-size: 14px;
+      flex-shrink: 0;
+      transition: color 0.2s, transform 0.2s;
+    }
+    .site-card:hover .site-arrow {
+      color: #ff6b8a;
+      transform: translateX(3px);
+    }
+    /* 类型标签 */
+    .site-type-chip {
+      flex-shrink: 0;
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 10px;
+      color: #fff;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      align-self: flex-start;
+      margin-top: 1px;
+    }
+    .site-type-red    { background: #ff6b8a; }
+    .site-type-pink   { background: #ff8fa3; }
+    .site-type-orange { background: #ffa94d; }
+    .site-type-yellow { background: #ffd43b; color: #666; }
+    .site-type-green  { background: #51cf66; }
+    .site-type-teal   { background: #20c997; }
+    .site-type-blue   { background: #339af0; }
+    .site-type-purple { background: #845ef7; }
+    .site-type-brown  { background: #b08968; }
+    /* 类型图例条（主页网站管理区顶部） */
+    .type-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      margin: -8px 0 24px;
+      padding: 12px 16px;
+      background: #fafafa;
+      border-radius: 12px;
+      border: 1px solid #f0f0f0;
+    }
+    .type-legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #777;
+      font-weight: 500;
+    }
+    .type-legend-item .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+    }
+    /* 卡片配色（复用 tag 颜色体系） */
+    .site-red    { background: linear-gradient(135deg, #ff6b8a, #ff8fa3); }
+    .site-pink   { background: linear-gradient(135deg, #ff8fa3, #ffb3c1); }
+    .site-orange { background: linear-gradient(135deg, #ffa94d, #ffc078); }
+    .site-yellow { background: linear-gradient(135deg, #ffd43b, #ffe066); color: #555; }
+    .site-green  { background: linear-gradient(135deg, #51cf66, #69db7c); }
+    .site-teal   { background: linear-gradient(135deg, #20c997, #38d9a9); }
+    .site-blue   { background: linear-gradient(135deg, #339af0, #5c9cec); }
+    .site-purple { background: linear-gradient(135deg, #845ef7, #9775fa); }
+    .site-brown  { background: linear-gradient(135deg, #b08968, #c8a279); }
+
     @media (max-width: 768px) {
       .main-header h1 {
         font-size: 34px;
@@ -212,6 +380,9 @@ const sortedTags = Object.entries(tagCounts)
       .tag-item {
         padding: 8px 14px;
         font-size: 13px;
+      }
+      .site-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
@@ -252,6 +423,45 @@ const sortedTags = Object.entries(tagCounts)
         ))
       }
     </div>
+  </section>
+
+  <section class="sites-section fade-in">
+    <h2>网站管理</h2>
+    <div class="type-legend">
+      {Object.entries(TYPE_COLORS).map(([t, c]) => (
+        <span class="type-legend-item">
+          <span class={`dot site-type-${c}`} />
+          <span>{t}</span>
+        </span>
+      ))}
+    </div>
+    {
+      siteGroupsByType.map((group) => (
+        <div class="site-group">
+          <div class="site-group-title">
+            <span class={`dot site-type-${TYPE_COLORS[group.type]}`} />
+            <span>{group.type}</span>
+            <span class="group-count">({group.sites.length})</span>
+          </div>
+          <div class="site-grid">
+            {group.sites.map((site) => (
+              <a
+                class="site-card"
+                href={`/sites/${site.slug}`}
+              >
+                <div class={`site-icon site-${site.color || 'blue'}`}>{site.icon}</div>
+                <div class="site-info">
+                  <div class="site-name">{site.name}</div>
+                  {site.description && <div class="site-desc">{site.description}</div>}
+                </div>
+                <span class={`site-type-chip site-type-${TYPE_COLORS[site.type]}`}>{site.type}</span>
+                <span class="site-arrow">→</span>
+              </a>
+            ))}
+          </div>
+        </div>
+      ))
+    }
   </section>
 
   <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js" defer></script>

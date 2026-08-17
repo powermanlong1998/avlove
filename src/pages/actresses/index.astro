@@ -3,7 +3,13 @@ import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getTagColor } from '../../utils/tags';
 
-const actresses = await getCollection('actresses');
+const actresses = (await getCollection('actresses'))
+  // 按星级降序排序（5 星在前，3 星在后），同级时作品数多的在前
+  .sort((a, b) => {
+    const r = (b.data.rating ?? 3) - (a.data.rating ?? 3);
+    if (r !== 0) return r;
+    return (b.data.films ?? 0) - (a.data.films ?? 0);
+  });
 
 const regions = ['日本', '欧美', '韩国', '国产'] as const;
 
@@ -139,7 +145,30 @@ const activeRegion = validRegions.includes(initialRegionParam)
     .name-cn {
       font-size: 13px;
       color: #999;
+      margin-bottom: 8px;
+    }
+    .card-rating {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
       margin-bottom: 10px;
+      font-size: 13px;
+    }
+    .card-rating .mini-stars {
+      letter-spacing: 1px;
+      line-height: 1;
+    }
+    .card-rating .mini-star {
+      color: #ddd;
+      font-size: 13px;
+    }
+    .card-rating .mini-star.filled {
+      color: #ffb400;
+    }
+    .card-rating .rating-num {
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffb400;
     }
     .film-count {
       font-size: 12px;
@@ -246,12 +275,21 @@ const activeRegion = validRegions.includes(initialRegionParam)
             data-name-jp={a.data.name_jp}
             data-name-cn={a.data.name_cn}
             data-tags={a.data.tags.join(',')}
+            data-rating={a.data.rating ?? 3}
           >
           <div class="avatar-wrap">
             <img src={a.data.avatar} alt={a.data.name_jp} loading="lazy" />
           </div>
           <div class="name-jp">{a.data.name_jp}</div>
           <div class="name-cn">{a.data.name_cn}</div>
+          <div class="card-rating">
+            <span class="mini-stars">
+              {Array.from({ length: 5 }, (_, i) => (
+                <span class={`mini-star${i < (a.data.rating ?? 3) ? ' filled' : ''}`}>★</span>
+              ))}
+            </span>
+            <span class="rating-num">{a.data.rating ?? 3}.0</span>
+          </div>
           {
             a.data.films ? (
               <div class="film-count">{a.data.films} 部影片</div>

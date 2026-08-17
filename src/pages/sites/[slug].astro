@@ -1,0 +1,295 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { siteList, TYPE_COLORS } from '../../data/sites';
+
+export function getStaticPaths() {
+  return siteList.map((s) => ({
+    params: { slug: s.slug },
+    props: { site: s },
+  }));
+}
+
+const { site } = Astro.props;
+
+const colorClass = site.color || 'blue';
+const typeColorClass = TYPE_COLORS[site.type] || 'blue';
+---
+
+<BaseLayout title={`${site.name} - 网站详情`}>
+  <style>
+    .detail-header {
+      background: #fff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+      padding: 16px 0;
+      margin-bottom: 28px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .detail-header-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .back-link {
+      color: #888;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.2s;
+    }
+    .back-link:hover {
+      color: #ff6b8a;
+    }
+    .page-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #222;
+    }
+    .detail-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px 60px;
+    }
+    .site-card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 36px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+    }
+    .site-top {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #f2f2f2;
+      margin-bottom: 26px;
+    }
+    .site-icon {
+      width: 88px;
+      height: 88px;
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      color: #fff;
+      font-weight: 700;
+      flex-shrink: 0;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
+    }
+    .site-meta {
+      flex: 1;
+      min-width: 240px;
+    }
+    .site-name {
+      font-size: 28px;
+      font-weight: 800;
+      color: #1a1a1a;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+    .site-desc {
+      color: #777;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 12px;
+    }
+    .type-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 12px;
+      color: #fff;
+      letter-spacing: 0.3px;
+    }
+    .type-chip .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #fff;
+      opacity: 0.75;
+    }
+    /* 配色复用女优详情已有体系 */
+    .c-red    { background: linear-gradient(135deg, #ff6b8a, #ff8fa3); }
+    .c-pink   { background: linear-gradient(135deg, #ff8fa3, #ffb3c1); }
+    .c-orange { background: linear-gradient(135deg, #ffa94d, #ffc078); }
+    .c-yellow { background: linear-gradient(135deg, #ffd43b, #ffe066); color: #666; }
+    .c-green  { background: linear-gradient(135deg, #51cf66, #69db7c); }
+    .c-teal   { background: linear-gradient(135deg, #20c997, #38d9a9); }
+    .c-blue   { background: linear-gradient(135deg, #339af0, #5c9cec); }
+    .c-purple { background: linear-gradient(135deg, #845ef7, #9775fa); }
+    .c-brown  { background: linear-gradient(135deg, #b08968, #c8a279); }
+
+    .info-section {
+      margin-bottom: 24px;
+    }
+    .info-section-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 14px;
+      padding-left: 10px;
+      border-left: 3px solid #ff6b8a;
+      line-height: 1;
+    }
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 20px;
+    }
+    .info-row {
+      background: #fafafa;
+      border-radius: 12px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      border: 1px solid #f0f0f0;
+    }
+    .info-row.full { grid-column: 1 / -1; }
+    .info-label {
+      font-size: 12px;
+      color: #aaa;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+    .info-value {
+      font-size: 14px;
+      color: #333;
+      font-weight: 500;
+      word-break: break-all;
+    }
+    .info-value a {
+      color: #339af0;
+      text-decoration: none;
+    }
+    .info-value a:hover { text-decoration: underline; }
+    .secret-row {
+      background: linear-gradient(135deg, #fff6fa, #fdf7ff);
+      border-color: #ffe0e8;
+    }
+    .secret-text {
+      font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+      letter-spacing: 0.3px;
+      padding: 4px 8px;
+      background: #fff;
+      border-radius: 6px;
+      border: 1px dashed #ffc0cb;
+      display: inline-block;
+    }
+    .cta-row {
+      margin-top: 30px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.15s, filter 0.15s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      filter: brightness(1.05);
+    }
+    .btn-primary { background: #ff6b8a; color: #fff; }
+    .btn-outline {
+      background: #fff;
+      color: #555;
+      border: 1.5px solid #eaeaea;
+    }
+
+    @media (max-width: 640px) {
+      .site-card { padding: 24px 18px; }
+      .site-icon { width: 70px; height: 70px; border-radius: 18px; font-size: 32px; }
+      .site-name { font-size: 22px; }
+      .info-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+
+  <header class="detail-header">
+    <div class="detail-header-inner">
+      <a href="/" class="back-link">← 返回首页</a>
+      <div class="page-title">网站详情</div>
+    </div>
+  </header>
+
+  <main class="detail-container">
+    <section class="site-card">
+      <div class="site-top">
+        <div class={`site-icon c-${colorClass}`}>{site.icon}</div>
+        <div class="site-meta">
+          <h1 class="site-name">{site.name}</h1>
+          {site.description && <p class="site-desc">{site.description}</p>}
+          <span class={`type-chip c-${typeColorClass}`}>
+            <span class="dot" />
+            {site.type}
+          </span>
+        </div>
+      </div>
+
+      <div class="info-section">
+        <div class="info-section-title">网站地址</div>
+        <div class="info-grid">
+          <div class="info-row full">
+            <div class="info-label">目前地址（首页）</div>
+            <div class="info-value">
+              <a href={site.url} target="_blank" rel="noopener noreferrer">{site.url}</a>
+            </div>
+          </div>
+          <div class="info-row full">
+            <div class="info-label">发布页</div>
+            <div class="info-value">
+              <a href={site.publishUrl} target="_blank" rel="noopener noreferrer">{site.publishUrl}</a>
+            </div>
+          </div>
+          <div class="info-row full">
+            <div class="info-label">登录页</div>
+            <div class="info-value">
+              <a href={site.loginUrl} target="_blank" rel="noopener noreferrer">{site.loginUrl}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-section">
+        <div class="info-section-title">登录账户</div>
+        <div class="info-grid">
+          <div class="info-row secret-row">
+            <div class="info-label">账户 (Account)</div>
+            <div class="info-value"><span class="secret-text">{site.account}</span></div>
+          </div>
+          <div class="info-row secret-row">
+            <div class="info-label">密码 (Password)</div>
+            <div class="info-value"><span class="secret-text">{site.password}</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-row">
+        <a class="btn btn-outline" href={site.loginUrl} target="_blank" rel="noopener noreferrer">前往登录页 →</a>
+        <a class="btn btn-primary" href={site.url} target="_blank" rel="noopener noreferrer">访问网站首页 →</a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

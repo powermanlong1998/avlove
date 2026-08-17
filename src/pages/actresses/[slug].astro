@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getTagColor } from '../../utils/tags';
+import { siteGroupsByType, TYPE_COLORS } from '../../data/sites';
 
 export async function getStaticPaths() {
   const actresses = await getCollection('actresses');
@@ -153,6 +154,239 @@ const { Content } = await render(entry);
     .profile-body p {
       margin-bottom: 10px;
     }
+
+    /* ---------- 星级 ---------- */
+    .rating-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .stars {
+      display: inline-flex;
+      gap: 2px;
+      font-size: 20px;
+      line-height: 1;
+      letter-spacing: 1px;
+    }
+    .star {
+      color: #ddd;
+    }
+    .star.filled {
+      color: #ffb400;
+    }
+    .rating-num {
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffb400;
+    }
+    .rating-label {
+      font-size: 12px;
+      color: #aaa;
+    }
+
+    /* ---------- 代表作品 ---------- */
+    .works-section {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid #f0f0f0;
+    }
+    .section-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #222;
+      margin-bottom: 16px;
+      padding-left: 10px;
+      border-left: 3px solid #ff6b8a;
+      line-height: 1;
+    }
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    .work-card {
+      background: #fafafa;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #f0f0f0;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .work-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+    }
+    .work-image {
+      width: 100%;
+      aspect-ratio: 5 / 7;
+      object-fit: cover;
+      display: block;
+      background: #eee;
+    }
+    .work-info {
+      padding: 12px 14px;
+    }
+    .work-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .work-desc {
+      font-size: 12px;
+      color: #888;
+      line-height: 1.5;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .works-empty {
+      color: #aaa;
+      font-size: 13px;
+      padding: 12px 0;
+    }
+
+    /* ---------- 评价 ---------- */
+    .review-section {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid #f0f0f0;
+    }
+    .review-card {
+      background: linear-gradient(135deg, #fff6fa, #fdf7ff);
+      border: 1px solid #ffe0e8;
+      border-radius: 14px;
+      padding: 20px 22px;
+      position: relative;
+    }
+    .review-card::before {
+      content: "\201C";
+      position: absolute;
+      top: -8px;
+      left: 16px;
+      font-size: 48px;
+      color: #ffc0cb;
+      font-family: serif;
+      line-height: 1;
+    }
+    .review-text {
+      font-size: 14px;
+      line-height: 1.8;
+      color: #555;
+      padding-left: 8px;
+    }
+    .review-empty {
+      color: #aaa;
+      font-size: 13px;
+    }
+
+    /* ---------- 资源获取网站 ---------- */
+    .resources-section {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid #f0f0f0;
+    }
+    .resources-hint {
+      font-size: 12px;
+      color: #aaa;
+      margin-bottom: 16px;
+      padding: 8px 12px;
+      background: #fafafa;
+      border-radius: 8px;
+      border-left: 3px solid #ff6b8a;
+    }
+    .resource-type-block {
+      margin-bottom: 18px;
+    }
+    .resource-type-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #666;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .resource-type-title .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    .resource-type-title .type-count {
+      font-size: 11px;
+      color: #bbb;
+      font-weight: 500;
+    }
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+    .resource-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      background: #fafafa;
+      border: 1px solid #f0f0f0;
+      border-radius: 10px;
+      text-decoration: none;
+      color: inherit;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    }
+    .resource-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
+      border-color: #ffe0e8;
+      background: #fff;
+    }
+    .resource-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: #fff;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .resource-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #333;
+      flex: 1;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .resource-arrow {
+      color: #ccc;
+      font-size: 12px;
+      flex-shrink: 0;
+      transition: color 0.15s, transform 0.15s;
+    }
+    .resource-card:hover .resource-arrow {
+      color: #ff6b8a;
+      transform: translateX(2px);
+    }
+    /* 配色复用主站体系 */
+    .c-red    { background: linear-gradient(135deg, #ff6b8a, #ff8fa3); }
+    .c-pink   { background: linear-gradient(135deg, #ff8fa3, #ffb3c1); }
+    .c-orange { background: linear-gradient(135deg, #ffa94d, #ffc078); }
+    .c-yellow { background: linear-gradient(135deg, #ffd43b, #ffe066); color: #666; }
+    .c-green  { background: linear-gradient(135deg, #51cf66, #69db7c); }
+    .c-teal   { background: linear-gradient(135deg, #20c997, #38d9a9); }
+    .c-blue   { background: linear-gradient(135deg, #339af0, #5c9cec); }
+    .c-purple { background: linear-gradient(135deg, #845ef7, #9775fa); }
+    .c-brown  { background: linear-gradient(135deg, #b08968, #c8a279); }
+
     @media (max-width: 768px) {
       .profile-top {
         flex-direction: column;
@@ -187,6 +421,15 @@ const { Content } = await render(entry);
         <div class="profile-meta">
           <div class="profile-name-jp">{entry.data.name_jp}</div>
           <div class="profile-name-cn">{entry.data.name_cn}</div>
+          <div class="rating-row">
+            <span class="stars" aria-label={`${entry.data.rating} 星`}>
+              {Array.from({ length: 5 }, (_, i) => (
+                <span class={`star${i < entry.data.rating ? ' filled' : ''}`}>★</span>
+              ))}
+            </span>
+            <span class="rating-num">{entry.data.rating}.0</span>
+            <span class="rating-label">/ 5 星</span>
+          </div>
           <div class="profile-row">
             <span class="label">地区</span>
             <span class="value"><span class="region-pill">{entry.data.region}</span></span>
@@ -204,6 +447,62 @@ const { Content } = await render(entry);
       </div>
       <div class="profile-body">
         <Content />
+      </div>
+
+      {entry.data.works && entry.data.works.length > 0 && (
+        <div class="works-section">
+          <div class="section-title">代表作品</div>
+          <div class="works-grid">
+            {entry.data.works.map((work) => (
+              <div class="work-card">
+                <img class="work-image" src={work.image} alt={work.title} loading="lazy" />
+                <div class="work-info">
+                  <div class="work-title">{work.title}</div>
+                  <div class="work-desc">{work.description}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {entry.data.review && (
+        <div class="review-section">
+          <div class="section-title">综合评价</div>
+          <div class="review-card">
+            <p class="review-text">{entry.data.review}</p>
+          </div>
+        </div>
+      )}
+
+      <div class="resources-section">
+        <div class="section-title">资源获取网站</div>
+        <div class="resources-hint">
+          💡 以下网站可用于搜索、下载或浏览该女优的相关资源（图片 / 影视 / 漫画 / 复古作品等），点击卡片在新标签页打开。
+        </div>
+        {siteGroupsByType.map((group) => (
+          <div class="resource-type-block">
+            <div class="resource-type-title">
+              <span class={`dot c-${TYPE_COLORS[group.type]}`} />
+              <span>{group.type}</span>
+              <span class="type-count">({group.sites.length})</span>
+            </div>
+            <div class="resource-grid">
+              {group.sites.map((site) => (
+                <a
+                  class="resource-card"
+                  href={site.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <div class={`resource-icon c-${site.color || 'blue'}`}>{site.icon}</div>
+                  <span class="resource-name">{site.name}</span>
+                  <span class="resource-arrow">↗</span>
+                </a>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   </div>

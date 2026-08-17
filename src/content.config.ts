@@ -24,6 +24,16 @@ const actresses = defineCollection({
     avatar: avatarSchema,
     tags: z.array(z.string()),
     films: z.number().optional(),
+    // 星级 1-5（默认 3）
+    rating: z.number().min(1).max(5).default(3),
+    // 代表作品：每部含标题、图片、简介
+    works: z.array(z.object({
+      title: z.string(),
+      image: z.string(),
+      description: z.string(),
+    })).default([]),
+    // 综合评价
+    review: z.string().default(''),
   }),
 });
 
