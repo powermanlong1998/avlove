@@ -1,0 +1,364 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getTagColor } from '../utils/tags';
+
+const actresses = await getCollection('actresses');
+
+const tagCounts: Record<string, number> = {};
+for (const a of actresses) {
+  for (const tag of a.data.tags) {
+    tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+  }
+}
+
+const sortedTags = Object.entries(tagCounts)
+  .sort((a, b) => b[1] - a[1])
+  .slice(0, 30);
+---
+
+<BaseLayout>
+  <style>
+    .main-header {
+      text-align: center;
+      padding: 70px 20px 30px;
+    }
+    .main-header h1 {
+      font-size: 52px;
+      font-weight: 800;
+      color: #1a1a1a;
+      letter-spacing: 4px;
+      margin-bottom: 10px;
+    }
+    .main-header .subtitle {
+      font-size: 17px;
+      color: #888;
+      letter-spacing: 1px;
+    }
+    .search-wrapper {
+      max-width: 640px;
+      margin: 30px auto 0;
+      position: relative;
+    }
+    .search-input {
+      width: 100%;
+      padding: 18px 28px 18px 56px;
+      font-size: 16px;
+      border: 2px solid #e8e8e8;
+      border-radius: 32px;
+      outline: none;
+      transition: all 0.3s;
+      background: #fff;
+    }
+    .search-input:focus {
+      border-color: #ff6b8a;
+      box-shadow: 0 0 0 4px rgba(255, 107, 138, 0.15);
+    }
+    .search-icon {
+      position: absolute;
+      left: 22px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      color: #aaa;
+      pointer-events: none;
+    }
+    .search-results {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      max-height: 400px;
+      overflow-y: auto;
+      display: none;
+      z-index: 100;
+    }
+    .search-results.active {
+      display: block;
+    }
+    .search-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 18px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .search-item:hover {
+      background: #f8f8fa;
+    }
+    .search-item img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+    .search-item .info {
+      flex: 1;
+    }
+    .search-item .name-jp {
+      font-weight: 700;
+      font-size: 15px;
+      color: #222;
+    }
+    .search-item .name-cn {
+      font-size: 13px;
+      color: #888;
+    }
+    .search-item .region-badge {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 10px;
+      background: #f0f0f0;
+      color: #666;
+    }
+    .empty-result {
+      padding: 24px;
+      text-align: center;
+      color: #999;
+    }
+    .nav-section {
+      text-align: center;
+      margin: 50px 0 40px;
+    }
+    .nav-btn {
+      display: inline-block;
+      padding: 16px 48px;
+      background: linear-gradient(135deg, #ff6b8a, #ff8fa3);
+      color: #fff;
+      border-radius: 32px;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      box-shadow: 0 6px 20px rgba(255, 107, 138, 0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .nav-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 28px rgba(255, 107, 138, 0.45);
+    }
+    .tag-section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    .tag-section h2 {
+      font-size: 18px;
+      color: #555;
+      margin-bottom: 18px;
+      padding-left: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .tag-section h2::before {
+      content: "";
+      width: 4px;
+      height: 18px;
+      background: #ff6b8a;
+      border-radius: 2px;
+    }
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .tag-item {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 20px;
+      border-radius: 22px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      color: #fff;
+      border: none;
+      font-weight: 500;
+    }
+    .tag-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+    .tag-item .count {
+      margin-left: 8px;
+      background: rgba(255, 255, 255, 0.3);
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+    }
+    .tag-red { background: #ff6b8a; }
+    .tag-pink { background: #ff8fa3; }
+    .tag-orange { background: #ffa94d; }
+    .tag-yellow { background: #ffd43b; color: #555; }
+    .tag-green { background: #51cf66; }
+    .tag-teal { background: #20c997; }
+    .tag-blue { background: #339af0; }
+    .tag-purple { background: #845ef7; }
+    .tag-brown { background: #b08968; }
+    @media (max-width: 768px) {
+      .main-header h1 {
+        font-size: 34px;
+        letter-spacing: 2px;
+      }
+      .main-header {
+        padding: 40px 16px 20px;
+      }
+      .tag-list {
+        gap: 8px;
+      }
+      .tag-item {
+        padding: 8px 14px;
+        font-size: 13px;
+      }
+    }
+  </style>
+
+  <header class="main-header fade-in">
+    <h1>AVLove</h1>
+    <p class="subtitle">女优资料库 · 搜索 · 发现</p>
+  </header>
+
+  <div class="search-wrapper fade-in">
+    <span class="search-icon">🔍</span>
+    <input
+      id="searchInput"
+      class="search-input"
+      type="text"
+      placeholder="搜索女优名称（中文 / 日文 / 英文）..."
+      autocomplete="off"
+    />
+    <div id="searchResults" class="search-results"></div>
+  </div>
+
+  <div class="nav-section fade-in">
+    <a href="/actresses/" class="nav-btn">进入女优资料库 →</a>
+  </div>
+
+  <section class="tag-section fade-in">
+    <h2>热门标签</h2>
+    <div class="tag-list" id="tagList">
+      {
+        sortedTags.map(([tag, count]) => (
+          <button
+            class={`tag-item tag-${getTagColor(tag)}`}
+            data-tag={tag}
+          >
+            {tag}
+            <span class="count">{count}</span>
+          </button>
+        ))
+      }
+    </div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js" defer></script>
+  <script is:inline>
+    let fuse = null;
+    let allData = [];
+
+    async function initSearch() {
+      try {
+        const res = await fetch('/api/search.json');
+        allData = await res.json();
+        if (window.Fuse) {
+          fuse = new window.Fuse(allData, {
+            keys: ['name_jp', 'name_cn', 'region', 'tags'],
+            threshold: 0.3,
+            ignoreLocation: true,
+          });
+        }
+      } catch (e) {
+        console.error('Search init failed:', e);
+      }
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function renderResults(results) {
+      const container = document.getElementById('searchResults');
+      if (!results.length) {
+        container.innerHTML =
+          '<div class="empty-result">未找到相关女优</div>';
+        container.classList.add('active');
+        return;
+      }
+      container.innerHTML = results
+        .slice(0, 8)
+        .map(
+          (r) => `
+        <div class="search-item" data-slug="${escapeHtml(r.item.slug)}">
+          <img src="${escapeHtml(r.item.avatar)}" alt="" loading="lazy" />
+          <div class="info">
+            <div class="name-jp">${escapeHtml(r.item.name_jp)}</div>
+            <div class="name-cn">${escapeHtml(r.item.name_cn)}</div>
+          </div>
+          <span class="region-badge">${escapeHtml(r.item.region)}</span>
+        </div>
+      `
+        )
+        .join('');
+      container.classList.add('active');
+
+      container
+        .querySelectorAll('.search-item')
+        .forEach((el) => {
+          el.addEventListener('click', () => {
+            window.location.href = '/actresses/' + encodeURIComponent(
+              el.dataset.slug
+            );
+          });
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initSearch();
+
+      const input = document.getElementById('searchInput');
+      let debounce;
+
+      input.addEventListener('input', (e) => {
+        clearTimeout(debounce);
+        debounce = setTimeout(() => {
+          const query = e.target.value.trim();
+          if (!query) {
+            document.getElementById('searchResults').classList.remove('active');
+            return;
+          }
+          if (fuse) {
+            const results = fuse.search(query);
+            renderResults(results);
+          }
+        }, 200);
+      });
+
+      input.addEventListener('focus', (e) => {
+        if (e.target.value.trim() && fuse) {
+          const results = fuse.search(e.target.value.trim());
+          renderResults(results);
+        }
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-wrapper')) {
+          document
+            .getElementById('searchResults')
+            .classList.remove('active');
+        }
+      });
+
+      document.querySelectorAll('.tag-item').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const tag = btn.dataset.tag;
+          window.location.href = '/actresses/?tag=' + encodeURIComponent(tag);
+        });
+      });
+    });
+  </script>
+</BaseLayout>

@@ -1,0 +1,35 @@
+const tagColors: Record<string, string> = {
+  '巨乳': 'red',
+  '萝莉': 'pink',
+  '御姐': 'orange',
+  '人妻': 'yellow',
+  '制服': 'green',
+  '丝袜': 'teal',
+  '黑丝': 'blue',
+  '白丝': 'purple',
+  '眼镜': 'brown',
+  '护士': 'red',
+  '教师': 'pink',
+  '女仆': 'orange',
+  '兔女郎': 'yellow',
+  '泳装': 'green',
+  '运动': 'teal',
+  '短发': 'blue',
+  '长发': 'purple',
+  '双马尾': 'brown',
+  'S级': 'red',
+  'A级': 'pink',
+  '经典': 'orange',
+  '新人': 'yellow',
+  '人气': 'green',
+  '美少女': 'teal',
+  '熟女': 'blue',
+  '年轻': 'purple',
+  '巨臀': 'brown',
+  '纹身': 'red',
+  '冷艳': 'pink',
+};
+
+export function getTagColor(tag: string): string {
+  return tagColors[tag] || 'blue';
+}

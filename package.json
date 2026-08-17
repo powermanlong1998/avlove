@@ -1,0 +1,17 @@
+{
+  "name": "avlove",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "search": "node scripts/cli.mjs"
+  },
+  "dependencies": {
+    "astro": "^7.0.0",
+    "fuse.js": "^7.0.0"
+  }
+}

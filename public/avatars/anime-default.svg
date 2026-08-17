@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fce4ec"/>
+      <stop offset="50%" stop-color="#f3e5f5"/>
+      <stop offset="100%" stop-color="#e8eaf6"/>
+    </linearGradient>
+    <radialGradient id="face" cx="50%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#fff5ec"/>
+      <stop offset="100%" stop-color="#fde0cc"/>
+    </radialGradient>
+    <linearGradient id="hair" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6d4c41"/>
+      <stop offset="100%" stop-color="#4e342e"/>
+    </linearGradient>
+    <linearGradient id="uniform" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#5c6bc0"/>
+      <stop offset="100%" stop-color="#3949ab"/>
+    </linearGradient>
+    <radialGradient id="eyeBlue" cx="50%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#90caf9"/>
+      <stop offset="60%" stop-color="#1e88e5"/>
+      <stop offset="100%" stop-color="#0d47a1"/>
+    </radialGradient>
+    <radialGradient id="cheek" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffb3c1" stop-opacity="0.85"/>
+      <stop offset="100%" stop-color="#ffb3c1" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="400" height="400" fill="url(#bg)"/>
+  <!-- 背景装饰星星 -->
+  <g fill="#ffffff" opacity="0.75">
+    <circle cx="50" cy="70" r="3"/>
+    <circle cx="360" cy="50" r="2.5"/>
+    <circle cx="330" cy="120" r="2"/>
+    <circle cx="70" cy="330" r="2.5"/>
+    <circle cx="350" cy="340" r="3"/>
+    <circle cx="40" cy="200" r="2"/>
+  </g>
+  <!-- 背景柔和的花形 -->
+  <g transform="translate(330,300)" opacity="0.35" fill="#fff">
+    <g transform="rotate(0)">
+      <ellipse cx="0" cy="-18" rx="8" ry="14"/>
+    </g>
+    <g transform="rotate(72)">
+      <ellipse cx="0" cy="-18" rx="8" ry="14"/>
+    </g>
+    <g transform="rotate(144)">
+      <ellipse cx="0" cy="-18" rx="8" ry="14"/>
+    </g>
+    <g transform="rotate(216)">
+      <ellipse cx="0" cy="-18" rx="8" ry="14"/>
+    </g>
+    <g transform="rotate(288)">
+      <ellipse cx="0" cy="-18" rx="8" ry="14"/>
+    </g>
+    <circle r="6" fill="#ffe082"/>
+  </g>
+
+  <!-- 脖子 -->
+  <path d="M175 285 Q200 300 225 285 L225 320 Q200 328 175 320 Z" fill="#f7d3ba"/>
+  <!-- 水手服领（藏青色三角形 + 红色领结绳） -->
+  <path d="M110 395 L110 335 Q200 305 290 335 L290 395 Z" fill="url(#uniform)"/>
+  <path d="M150 332 L200 310 L250 332 L235 350 L200 340 L165 350 Z"
+        fill="#ffffff" stroke="#c5cae9" stroke-width="1.5"/>
+  <path d="M190 340 L200 370 L210 340 Q200 352 190 340 Z" fill="#e53935"/>
+
+  <!-- 脸 -->
+  <ellipse cx="200" cy="210" rx="92" ry="102" fill="url(#face)"/>
+
+  <!-- 头发后层 -->
+  <path d="M100 205
+           Q85 145 130 90
+           Q175 55 200 58
+           Q225 55 270 90
+           Q315 145 300 205
+           L300 175
+           Q300 130 260 100
+           Q230 80 200 80
+           Q170 80 140 100
+           Q100 130 100 175 Z"
+        fill="url(#hair)"/>
+
+  <!-- 齐刘海 -->
+  <path d="M110 170
+           Q115 120 145 100
+           Q170 85 200 88
+           Q232 85 256 102
+           Q285 120 290 170
+           Q275 150 255 158
+           Q245 172 230 162
+           Q215 175 200 163
+           Q185 175 170 162
+           Q155 172 145 158
+           Q125 150 110 170 Z"
+        fill="url(#hair)"/>
+
+  <!-- 两侧头发丝 -->
+  <path d="M108 200 Q100 260 122 300 Q110 270 115 230 Z" fill="url(#hair)"/>
+  <path d="M292 200 Q300 260 278 300 Q290 270 285 230 Z" fill="url(#hair)"/>
+
+  <!-- 耳朵 -->
+  <ellipse cx="112" cy="220" rx="8" ry="14" fill="#f7d3ba"/>
+  <ellipse cx="288" cy="220" rx="8" ry="14" fill="#f7d3ba"/>
+
+  <!-- 眉毛 -->
+  <path d="M140 182 Q155 176 175 182" stroke="#4e342e" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+  <path d="M225 182 Q245 176 260 182" stroke="#4e342e" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+
+  <!-- 眼睛（大大圆圆动漫风格，蓝色瞳孔，高光多层） -->
+  <g>
+    <!-- 左眼白 -->
+    <ellipse cx="157" cy="218" rx="24" ry="28" fill="#ffffff" stroke="#3e2723" stroke-width="2"/>
+    <!-- 左眼蓝瞳 -->
+    <ellipse cx="157" cy="222" rx="16" ry="20" fill="url(#eyeBlue)"/>
+    <!-- 左瞳孔黑 -->
+    <ellipse cx="157" cy="226" rx="8" ry="11" fill="#0d2b4d"/>
+    <!-- 左高光 -->
+    <circle cx="150" cy="214" r="4.5" fill="#ffffff"/>
+    <circle cx="163" cy="228" r="2.2" fill="#ffffff" opacity="0.9"/>
+
+    <!-- 右眼白 -->
+    <ellipse cx="243" cy="218" rx="24" ry="28" fill="#ffffff" stroke="#3e2723" stroke-width="2"/>
+    <!-- 右眼蓝瞳 -->
+    <ellipse cx="243" cy="222" rx="16" ry="20" fill="url(#eyeBlue)"/>
+    <!-- 右瞳孔黑 -->
+    <ellipse cx="243" cy="226" rx="8" ry="11" fill="#0d2b4d"/>
+    <!-- 右高光 -->
+    <circle cx="236" cy="214" r="4.5" fill="#ffffff"/>
+    <circle cx="249" cy="228" r="2.2" fill="#ffffff" opacity="0.9"/>
+  </g>
+
+  <!-- 鼻子 -->
+  <path d="M198 248 Q200 255 202 248" stroke="#c7987a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+
+  <!-- 腮红 -->
+  <ellipse cx="135" cy="252" rx="18" ry="11" fill="url(#cheek)"/>
+  <ellipse cx="265" cy="252" rx="18" ry="11" fill="url(#cheek)"/>
+
+  <!-- 嘴巴：温柔的微笑（弧线，闭合） -->
+  <path d="M185 275 Q200 288 215 275" stroke="#c62828" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+  <path d="M188 276 Q200 282 212 276" fill="#f48fb1" opacity="0.6"/>
+
+  <!-- 头顶呆毛 -->
+  <path d="M200 60 Q208 40 218 48 Q208 52 206 66 Z" fill="url(#hair)"/>
+
+  <!-- 头发侧边小花饰 -->
+  <g transform="translate(105,165)">
+    <g fill="#ff8fa3" stroke="#e91e63" stroke-width="0.8">
+      <ellipse cx="0" cy="-9" rx="4" ry="7"/>
+      <g transform="rotate(72)"><ellipse cx="0" cy="-9" rx="4" ry="7"/></g>
+      <g transform="rotate(144)"><ellipse cx="0" cy="-9" rx="4" ry="7"/></g>
+      <g transform="rotate(216)"><ellipse cx="0" cy="-9" rx="4" ry="7"/></g>
+      <g transform="rotate(288)"><ellipse cx="0" cy="-9" rx="4" ry="7"/></g>
+    </g>
+    <circle r="3" fill="#fff59d" stroke="#f9a825" stroke-width="0.8"/>
+  </g>
+</svg>

@@ -1,0 +1,365 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getTagColor } from '../../utils/tags';
+
+const actresses = await getCollection('actresses');
+
+const regions = ['日本', '欧美', '韩国', '国产'] as const;
+
+const regionCounts: Record<string, number> = { '全部': actresses.length };
+for (const r of regions) {
+  regionCounts[r] = actresses.filter((a) => a.data.region === r).length;
+}
+
+const validRegions = ['全部', ...regions];
+const initialRegionParam = Astro.url.searchParams.get('region') || '全部';
+const activeRegion = validRegions.includes(initialRegionParam)
+  ? initialRegionParam
+  : '全部';
+---
+
+<BaseLayout title="女优资料库 - AVLove">
+  <style>
+    .page-header {
+      background: #fff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+      padding: 18px 0;
+      margin-bottom: 28px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .page-header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .back-link {
+      color: #888;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.2s;
+    }
+    .back-link:hover {
+      color: #ff6b8a;
+    }
+    .page-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #222;
+    }
+    .region-tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .region-tab {
+      padding: 9px 24px;
+      border: 2px solid #e0e0e0;
+      border-radius: 22px;
+      background: #fff;
+      cursor: pointer;
+      font-size: 14px;
+      color: #666;
+      transition: all 0.25s;
+      font-weight: 500;
+    }
+    .region-tab:hover {
+      border-color: #ff6b8a;
+      color: #ff6b8a;
+    }
+    .region-tab.active {
+      background: #ff6b8a;
+      border-color: #ff6b8a;
+      color: #fff;
+    }
+    .region-tab .count {
+      margin-left: 6px;
+      font-size: 12px;
+      opacity: 0.8;
+    }
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 22px;
+      padding: 0 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .actress-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 18px 14px;
+      text-align: center;
+      transition: transform 0.25s, box-shadow 0.25s;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+    .actress-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+      border-color: #ffe0e8;
+    }
+    .avatar-wrap {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 14px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 3px solid #fff;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+      background: #eee;
+    }
+    .avatar-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .name-jp {
+      font-size: 16px;
+      font-weight: 800;
+      color: #1a1a1a;
+      margin-bottom: 3px;
+      letter-spacing: 0.5px;
+    }
+    .name-cn {
+      font-size: 13px;
+      color: #999;
+      margin-bottom: 10px;
+    }
+    .film-count {
+      font-size: 12px;
+      color: #bbb;
+      margin-bottom: 10px;
+    }
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      justify-content: center;
+    }
+    .actress-tag {
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 10px;
+      color: #fff;
+      font-weight: 500;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+      color: #aaa;
+    }
+    .empty-state .icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+    .results-info {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px 16px;
+      font-size: 14px;
+      color: #888;
+    }
+    /* Tag colors */
+    .tag-red { background: #ff6b8a; }
+    .tag-pink { background: #ff8fa3; }
+    .tag-orange { background: #ffa94d; }
+    .tag-yellow { background: #ffd43b; color: #555; }
+    .tag-green { background: #51cf66; }
+    .tag-teal { background: #20c997; }
+    .tag-blue { background: #339af0; }
+    .tag-purple { background: #845ef7; }
+    .tag-brown { background: #b08968; }
+    @media (max-width: 768px) {
+      .card-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 16px;
+      }
+      .avatar-wrap {
+        width: 96px;
+        height: 96px;
+      }
+      .region-tabs {
+        width: 100%;
+        justify-content: center;
+      }
+      .header-left {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+
+  <header class="page-header">
+    <div class="page-header-inner">
+      <div class="header-left">
+        <a href="/" class="back-link">← 返回首页</a>
+        <h1 class="page-title">女优资料库</h1>
+      </div>
+      <div class="region-tabs" id="regionTabs">
+        <button
+          class={`region-tab${'全部' === activeRegion ? ' active' : ''}`}
+          data-region="全部"
+        >
+          全部
+          <span class="count">{regionCounts['全部']}</span>
+        </button>
+        {
+          regions.map((r) => (
+            <button
+              class={`region-tab${r === activeRegion ? ' active' : ''}`}
+              data-region={r}
+            >
+              {r}
+              <span class="count">{regionCounts[r]}</span>
+            </button>
+          ))
+        }
+      </div>
+    </div>
+  </header>
+
+  <div class="results-info" id="resultsInfo"></div>
+
+  <div class="card-grid fade-in" id="cardGrid">
+    {
+      actresses.map((a) => (
+        <div
+            class="actress-card"
+            data-region={a.data.region}
+            data-slug={a.id}
+            data-name-jp={a.data.name_jp}
+            data-name-cn={a.data.name_cn}
+            data-tags={a.data.tags.join(',')}
+          >
+          <div class="avatar-wrap">
+            <img src={a.data.avatar} alt={a.data.name_jp} loading="lazy" />
+          </div>
+          <div class="name-jp">{a.data.name_jp}</div>
+          <div class="name-cn">{a.data.name_cn}</div>
+          {
+            a.data.films ? (
+              <div class="film-count">{a.data.films} 部影片</div>
+            ) : null
+          }
+          <div class="tag-list">
+            {
+              a.data.tags.map((tag) => (
+                <span class={`actress-tag tag-${getTagColor(tag)}`}>{tag}</span>
+              ))
+            }
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const validRegions = ['全部', '日本', '欧美', '韩国', '国产'];
+      let currentRegion = params.get('region') || '全部';
+      if (!validRegions.includes(currentRegion)) currentRegion = '全部';
+      let currentTag = params.get('tag') || '';
+      let currentQuery = params.get('q') || '';
+
+      const tabs = document.querySelectorAll('.region-tab');
+      const cards = document.querySelectorAll('.actress-card');
+      const resultsInfo = document.getElementById('resultsInfo');
+
+      function filterCards() {
+        let visible = 0;
+        const searchLower = currentQuery.toLowerCase();
+        const showAllRegions = currentRegion === '全部';
+
+        cards.forEach((card) => {
+          const region = card.dataset.region;
+          const tags = card.dataset.tags.split(',');
+          const nameJp = card.dataset.nameJp.toLowerCase();
+          const nameCn = card.dataset.nameCn.toLowerCase();
+
+          let show = true;
+
+          if (!showAllRegions && region !== currentRegion) show = false;
+          if (currentTag && !tags.includes(currentTag)) show = false;
+          if (
+            currentQuery &&
+            !nameJp.includes(searchLower) &&
+            !nameCn.includes(searchLower) &&
+            !card.dataset.tags.toLowerCase().includes(searchLower)
+          ) {
+            show = false;
+          }
+
+          if (show) {
+            card.style.display = '';
+            visible++;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+
+        const regionInfo = showAllRegions ? '全部地区' : `地区：${currentRegion}`;
+        const tagInfo = currentTag ? ` · 标签：${currentTag}` : '';
+        const queryInfo = currentQuery ? ` · 搜索：${currentQuery}` : '';
+        resultsInfo.textContent = `${regionInfo} · 共找到 ${visible} 位女优${tagInfo}${queryInfo}`;
+      }
+
+      function updateTabs() {
+        tabs.forEach((tab) => {
+          tab.classList.toggle('active', tab.dataset.region === currentRegion);
+        });
+      }
+
+      function syncUrl() {
+        const url = new URL(window.location.href);
+        url.searchParams.set('region', currentRegion);
+        if (currentTag) url.searchParams.set('tag', currentTag);
+        else url.searchParams.delete('tag');
+        if (currentQuery) url.searchParams.set('q', currentQuery);
+        else url.searchParams.delete('q');
+        window.history.replaceState({}, '', url);
+      }
+
+      tabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+          currentRegion = tab.dataset.region;
+          currentTag = '';
+          currentQuery = '';
+          updateTabs();
+          filterCards();
+          syncUrl();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      });
+
+      // 卡片点击：跳转到详情/编辑页
+      cards.forEach((card) => {
+        card.addEventListener('click', () => {
+          const slug = card.dataset.slug;
+          if (slug) {
+            window.location.href = '/actresses/' + encodeURIComponent(slug);
+          }
+        });
+      });
+
+      updateTabs();
+      filterCards();
+    });
+  </script>
+</BaseLayout>
