@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ================================================
 # AVLove 项目 .gitignore
 # Astro + Node.js + TypeScript + Windows
@@ -46,3 +47,53 @@ $RECYCLE.BIN/
 *.local
 *.tmp
 *.bak
+=======
+# ================================================
+# AVLove 项目 .gitignore
+# Astro + Node.js + TypeScript + Windows
+# 注：每条规则单独成行，避免行内注释在 Windows 下失效
+# ================================================
+
+# ---------- 依赖目录 ----------
+node_modules/
+
+# ---------- Astro 构建与缓存 ----------
+.astro/
+dist/
+.output/
+
+# ---------- 日志 ----------
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ---------- 环境变量（避免提交密钥 / Token） ----------
+.env
+.env.*
+# 允许提交模板：取消下一行注释以允许 .env.example
+# !.env.example
+
+# ---------- 编辑器 / IDE ----------
+.vscode/*
+# !.vscode/extensions.json
+# !.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# ---------- 操作系统 ----------
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ---------- 类型检查 / 临时 ----------
+*.tsbuildinfo
+
+# ---------- 本地临时文件 ----------
+*.local
+*.tmp
+*.bak
+>>>>>>> 4d7f8bacf446bc337f10452eb4a271584cab4df5
