@@ -19,3 +19,6 @@ Angela White，欧美顶级女优，多次获得行业大奖。
 
 ## 网站获取
 https://www.brazzers.com/pornstar/4685/angela-white
+
+### 图片
+https://www.pornpics.com/zh/pornstars/angela-white/
