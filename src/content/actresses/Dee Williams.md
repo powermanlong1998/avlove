@@ -1,9 +1,9 @@
 ---
-name_jp: Lauren Phillips
-name_cn: 劳伦·菲利普斯
+name_jp: Dee Williams
+name_cn: 迪·威廉姆斯
 region: 欧美
-avatar: /avatars/Lauren-Phillips.jpg
-tags: ["BBW","巨乳"]
+avatar: /avatars/Dee-Williams.jpg
+tags: ["BBW","熟女","巨乳"]
 films: 5
 rating: 5
 works:
@@ -15,5 +15,5 @@ review: "欧美行业资深演员"
 
 ## 个人简介
 
-Lauren Phillips 非常喜欢的BBW美国女优
+Dee Williams 非常喜欢BBW 熟女美国女优
 
