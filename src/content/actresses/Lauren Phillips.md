@@ -2,7 +2,7 @@
 name_jp: Lauren Phillips
 name_cn: 劳伦·菲利普斯
 region: 欧美
-avatar: /avatars/Lauren-Phillips.jpg
+avatar: /avatars/Lauren Phillips.jpg
 tags: ["BBW","巨乳"]
 films: 5
 rating: 5

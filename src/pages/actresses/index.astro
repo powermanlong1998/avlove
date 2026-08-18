@@ -1,7 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getTagColor } from '../../utils/tags';
+import { getTagColor, encodeAssetPath } from '../../utils/tags';
 
 const actresses = (await getCollection('actresses'))
   // 按星级降序排序（5 星在前，3 星在后），同级时作品数多的在前
@@ -278,7 +278,7 @@ const activeRegion = validRegions.includes(initialRegionParam)
             data-rating={a.data.rating ?? 3}
           >
           <div class="avatar-wrap">
-            <img src={a.data.avatar} alt={a.data.name_jp} loading="lazy" />
+            <img src={encodeAssetPath(a.data.avatar)} alt={a.data.name_jp} loading="lazy" />
           </div>
           <div class="name-jp">{a.data.name_jp}</div>
           <div class="name-cn">{a.data.name_cn}</div>

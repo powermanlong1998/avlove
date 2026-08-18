@@ -33,3 +33,17 @@ const tagColors: Record<string, string> = {
 export function getTagColor(tag: string): string {
   return tagColors[tag] || 'blue';
 }
+
+/**
+ * 将本地静态资源路径中的特殊字符（空格、中文等）编码，保证 <img src> 在浏览器中可靠加载。
+ * - 远程 http(s) URL 原样返回
+ * - 本地路径按 "/" 分段编码，保留目录分隔符
+ */
+export function encodeAssetPath(path: string): string {
+  if (!path) return path;
+  if (/^https?:\/\//i.test(path)) return path;
+  return path
+    .split('/')
+    .map((seg) => encodeURIComponent(seg))
+    .join('/');
+}

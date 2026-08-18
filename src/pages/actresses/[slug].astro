@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getTagColor } from '../../utils/tags';
+import { getTagColor, encodeAssetPath } from '../../utils/tags';
 import { siteGroupsByType, TYPE_COLORS } from '../../data/sites';
 
 export async function getStaticPaths() {
@@ -416,7 +416,7 @@ const { Content } = await render(entry);
     <div class="profile-card">
       <div class="profile-top">
         <div class="profile-avatar">
-          <img src={entry.data.avatar} alt={entry.data.name_jp} />
+          <img src={encodeAssetPath(entry.data.avatar)} alt={entry.data.name_jp} />
         </div>
         <div class="profile-meta">
           <div class="profile-name-jp">{entry.data.name_jp}</div>
@@ -455,7 +455,7 @@ const { Content } = await render(entry);
           <div class="works-grid">
             {entry.data.works.map((work) => (
               <div class="work-card">
-                <img class="work-image" src={work.image} alt={work.title} loading="lazy" />
+                <img class="work-image" src={encodeAssetPath(work.image)} alt={work.title} loading="lazy" />
                 <div class="work-info">
                   <div class="work-title">{work.title}</div>
                   <div class="work-desc">{work.description}</div>
