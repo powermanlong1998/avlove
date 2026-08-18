@@ -2,7 +2,7 @@
 name_jp: 七海ティナ
 name_cn: 七海蒂娜
 region: 日本
-avatar: /avatars/七海ティナ.jpg
+avatar: /avatars/七海蒂娜.jpg
 tags: [ "美腿", "御姐"]
 films: 76
 rating: 4
