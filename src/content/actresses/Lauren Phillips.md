@@ -10,6 +10,9 @@ works:
   - title: "The Navy Nurse"
     image: /works/the-navy-nurse.png
     description: "护士"
+  - title: "The Navy Nurse"
+    image: /works/My_Professor's_Pantyhose.png
+    description: "教师"
 review: "欧美行业资深演员"
 ---
 
